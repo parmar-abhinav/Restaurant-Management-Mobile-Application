@@ -2,17 +2,21 @@ import React, {Component} from 'react';
 import { Text, View, ScrollView, FlatList } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { Card, ListItem, Icon } from 'react-native-elements';
-import { DISHES } from '../shared/dishes';
-import {COMMENTS} from '../shared/comments';
 import { baseUrl } from '../shared/baseUrl';
 import {connect} from 'react-redux';
+import { postFavorite } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
       dishes: state.dishes,
-      comments: state.comments
+      comments: state.comments,
+      favorites: state.favorites
     }
   }
+
+  const mapDispatchToProps = dispatch => ({
+    postFavorite: (dishId) => dispatch(postFavorite(dishId))
+})
 
 function RenderDish(props) {
 
@@ -63,32 +67,23 @@ function RenderComments(props) {
 
 class DishDetail extends Component{
 
-    constructor(props){
-        super(props);
-        this.state = {
-            favorites: []
-        };
-    };
-
     static navigationOptions = {
         title: 'Dish Details'
     };
 
-    markFavorite(dishId){
-        this.setState({
-            favorites: this.state.favorites.concat(dishId)
-        })
+    markFavorite(dishId) {
+        this.props.postFavorite(dishId);
     }
     
     render(){
         const dishId = this.props.navigation.getParam('dishId', '');
         return(
         <ScrollView>
-            <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.state.favorites.some(el => el === dishId)} onPress={() => {this.markFavorite(dishId)}}/>
+            <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.props.favorites.some(el => el === dishId)} onPress={() => {this.markFavorite(dishId)}}/>
             <RenderComments comments={this.props.comments.comments.filter((comment) => {return comment.dishId === dishId})} />
         </ScrollView>
         );
     }
 }
 
-export default connect(mapStateToProps)(DishDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(DishDetail);
