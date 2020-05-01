@@ -8,6 +8,7 @@ import { postFavorite, postComment } from '../redux/ActionCreators';
 import { Modal } from 'react-native';
 import { Value } from 'react-native-reanimated';
 import { comments } from '../redux/comments';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -28,6 +29,7 @@ function RenderDish(props) {
 
     if (dish != null) {
         return (
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
             <Card
                 featuredTitle={dish.name}
                 image={{ uri: baseUrl + dish.image }}>
@@ -39,6 +41,7 @@ function RenderDish(props) {
                     <Icon type="font-awesome" name="pencil" raised reverse color="#512DA8" onPress={() => props.handleModal()} />
                 </View>
             </Card>
+            </Animatable.View>
         );
     }
     else {
@@ -54,6 +57,7 @@ function RenderComments(props) {
     const renderCommentItem = ({ item, index }) => {
 
         return (
+            <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
             <View key={index} style={{ margin: 10 }}>
                 <Text style={{ fontSize: 14 }}>{item.comment}</Text>
                 <View style={{alignItems: 'baseline'}}>
@@ -66,6 +70,7 @@ function RenderComments(props) {
                 </View>
                 <Text style={{ fontSize: 12 }}>{'-- ' + item.author + ', ' + item.date} </Text>
             </View>
+            </Animatable.View>
         );
     };
 
