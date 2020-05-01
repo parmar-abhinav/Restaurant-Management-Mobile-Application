@@ -9,10 +9,10 @@ import { leaders } from './leaders';
 export const ConfigureStore = () => {
     const store = createStore(
         combineReducers({
-            dishes,
-            comments,
-            promotions,
-            leaders
+            dishes: dishes,
+            comments: comments,
+            promotions: promotions,
+            leaders: leaders
         }),
         applyMiddleware(thunk, logger)
     );
