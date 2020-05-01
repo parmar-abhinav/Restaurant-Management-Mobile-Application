@@ -51,22 +51,7 @@ const CustomDrawerContentComponent = (props) => (
     </ScrollView>
 )
 
-const ReservationNavigator = createStackNavigator({
-    Reservation: { screen: Reservation }
-  }, {
-    navigationOptions: ({ navigation }) => ({
-      headerStyle: {
-          backgroundColor: "#512DA8"
-      },
-      headerTitleStyle: {
-          color: "#fff"            
-      },
-      headerTintColor: "#fff",
-      headerLeft: <Icon name="menu" size={24}
-        iconStyle={{ color: 'white' }} 
-        onPress={ () => navigation.navigate('DrawerToggle') } />    
-    })
-  })
+
 
 const MenuNavigator = createStackNavigator({
     DishDetail: { screen: DishDetail },
@@ -105,6 +90,23 @@ const HomeNavigator = createStackNavigator({
         headerLeft:() => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
+
+const ReservationNavigator = createStackNavigator({
+    Reservation: { screen: Reservation }
+  }, {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerStyle: {
+          backgroundColor: "#512DA8"
+      },
+      headerTitleStyle: {
+          color: "#fff"            
+      },
+      headerTintColor: "#fff",
+      headerLeft:() => <Icon name="menu" size={24}
+        iconStyle={{ color: 'white' }} 
+        onPress={ () => navigation.navigate('DrawerToggle') } />    
+    })
+  })
 
 const ContactNavigator = createStackNavigator({
     Contact: { screen: Contact }
