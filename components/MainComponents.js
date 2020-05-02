@@ -13,23 +13,24 @@ import About from './AboutComponent';
 import { Icon } from 'react-native-elements';
 import Reservation from './ReservationComponent';
 import { connect } from 'react-redux';
+import Login from './LoginComponent';
 import Favorites from './FavoriteComponent';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
-  return {
-    dishes: state.dishes,
-    comments: state.comments,
-    promotions: state.promotions,
-    leaders: state.leaders
-  }
+    return {
+        dishes: state.dishes,
+        comments: state.comments,
+        promotions: state.promotions,
+        leaders: state.leaders
+    }
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchDishes: () => dispatch(fetchDishes()),
-  fetchComments: () => dispatch(fetchComments()),
-  fetchPromos: () => dispatch(fetchPromos()),
-  fetchLeaders: () => dispatch(fetchLeaders()),
+    fetchDishes: () => dispatch(fetchDishes()),
+    fetchComments: () => dispatch(fetchComments()),
+    fetchPromos: () => dispatch(fetchPromos()),
+    fetchLeaders: () => dispatch(fetchLeaders()),
 })
 
 
@@ -38,27 +39,43 @@ const CustomDrawerContentComponent = (props) => (
     <ScrollView>
         <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
             <View style={styles.drawerHeader}>
-            <View style={{ flex: 1 }}>
-                <Image source={require('./images/logo.png')} style={styles.drawerImage} />
-            </View>
-            <View style={{ flex: 2 }}>
-                <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
-            </View>
+                <View style={{ flex: 1 }}>
+                    <Image source={require('./images/logo.png')} style={styles.drawerImage} />
+                </View>
+                <View style={{ flex: 2 }}>
+                    <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
+                </View>
             </View>
             <>
-            <DrawerItems {...props} />
+                <DrawerItems {...props} />
             </>
         </SafeAreaView>
     </ScrollView>
 )
 
+const LoginNavigator = createStackNavigator({
+    Login: { screen: Login }
+}, {
+    defaultNavigationOptions: ({ navigation }) => ({
+        headerStyle: {
+            backgroundColor: "#512DA8"
+        },
+        headerTitleStyle: {
+            color: "#fff"
+        },
+        headerTintColor: "#fff",
+        headerLeft: <Icon name="menu" size={24}
+            iconStyle={{ color: 'white' }}
+            onPress={() => navigation.toggleDrawer()} />
+    })
+});
 
 const FavoritesNavigator = createStackNavigator({
     DishDetail: { screen: DishDetail },
     Favorites: {
         screen: Favorites,
         navigationOptions: ({ navigation }) => ({
-            headerLeft:() => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+            headerLeft: () => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
         })
     }
 },
@@ -81,7 +98,7 @@ const MenuNavigator = createStackNavigator({
     Menu: {
         screen: Menu,
         navigationOptions: ({ navigation }) => ({
-            headerLeft:() => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+            headerLeft: () => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
         })
     }
 },
@@ -110,26 +127,26 @@ const HomeNavigator = createStackNavigator({
             color: "#fff"
         },
         headerTintColor: "#fff",
-        headerLeft:() => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: () => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
 
 const ReservationNavigator = createStackNavigator({
     Reservation: { screen: Reservation }
-  }, {
+}, {
     defaultNavigationOptions: ({ navigation }) => ({
-      headerStyle: {
-          backgroundColor: "#512DA8"
-      },
-      headerTitleStyle: {
-          color: "#fff"            
-      },
-      headerTintColor: "#fff",
-      headerLeft:() => <Icon name="menu" size={24}
-        iconStyle={{ color: 'white' }} 
-        onPress={ () => navigation.navigate('DrawerToggle') } />    
+        headerStyle: {
+            backgroundColor: "#512DA8"
+        },
+        headerTitleStyle: {
+            color: "#fff"
+        },
+        headerTintColor: "#fff",
+        headerLeft: () => <Icon name="menu" size={24}
+            iconStyle={{ color: 'white' }}
+            onPress={() => navigation.navigate('DrawerToggle')} />
     })
-  })
+})
 
 const ContactNavigator = createStackNavigator({
     Contact: { screen: Contact }
@@ -142,7 +159,7 @@ const ContactNavigator = createStackNavigator({
             color: "#fff"
         },
         headerTintColor: "#fff",
-        headerLeft:() => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: () => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 }
 )
@@ -159,12 +176,28 @@ const AboutNavigator = createStackNavigator({
                 color: "#fff"
             },
             headerTintColor: "#fff",
-            headerLeft:() => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+            headerLeft: () => <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
         })
     }
 )
 
 const MainNavigator = createDrawerNavigator({
+    Login:
+    {
+        screen: LoginNavigator,
+        navigationOptions: {
+            title: 'Login',
+            drawerLabel: 'Login',
+            drawerIcon: ({ tintColor, focused }) => (
+                <Icon
+                    name='sign-in'
+                    type='font-awesome'
+                    size={24}
+                    iconStyle={{ color: tintColor }}
+                />
+            ),
+        }
+    },
     Home:
     {
         screen: HomeNavigator,
@@ -230,36 +263,39 @@ const MainNavigator = createDrawerNavigator({
         }
     },
     Favorites:
-        { screen: FavoritesNavigator,
-          navigationOptions: {
+    {
+        screen: FavoritesNavigator,
+        navigationOptions: {
             title: 'My Favorites',
             drawerLabel: 'My Favorites',
             drawerIcon: ({ tintColor, focused }) => (
-              <Icon
-                name='heart'
-                type='font-awesome'            
-                size={24}
-                iconStyle={{ color: tintColor }}
-              />
+                <Icon
+                    name='heart'
+                    type='font-awesome'
+                    size={24}
+                    iconStyle={{ color: tintColor }}
+                />
             ),
-          }
-        },
-    Reservation:
-      { screen: ReservationNavigator,
-        navigationOptions: {
-          title: 'Reserve Table',
-          drawerLabel: 'Reserve Table',
-          drawerIcon: ({ tintColor, focused }) => (
-            <Icon
-              name='cutlery'
-              type='font-awesome'            
-              size={24}
-              iconStyle={{ color: tintColor }}
-            />
-          ),
         }
-      }
+    },
+    Reservation:
+    {
+        screen: ReservationNavigator,
+        navigationOptions: {
+            title: 'Reserve Table',
+            drawerLabel: 'Reserve Table',
+            drawerIcon: ({ tintColor, focused }) => (
+                <Icon
+                    name='cutlery'
+                    type='font-awesome'
+                    size={24}
+                    iconStyle={{ color: tintColor }}
+                />
+            ),
+        }
+    }
 }, {
+    initialRouteName: 'Home',
     drawerBackgroundColor: '#D1C4E9',
     contentComponent: CustomDrawerContentComponent
 });
@@ -297,7 +333,7 @@ class Main extends Component {
         this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
-      }
+    }
 
     render() {
         return (

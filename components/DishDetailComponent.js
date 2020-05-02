@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, StyleSheet, Alert, PanResponder } from 'react-native';
+import { Text, View, ScrollView, FlatList, StyleSheet, Alert, PanResponder, Share } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Card, ListItem, Icon, Rating, Input, Button } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
@@ -69,6 +69,17 @@ function RenderDish(props) {
     })
 
     if (dish != null) {
+
+        const shareDish = (title, message, url) => {
+            Share.share({
+                title: title,
+                message: title + ': ' + message + ' ' + url,
+                url: url
+            },{
+                dialogTitle: 'Share ' + title
+            })
+        }
+
         return (
             <Animatable.View animation="fadeInDown" duration={2000} delay={1000} {...panResponder.panHandlers} ref={this.handleViewRef}>
             <Card
@@ -80,6 +91,14 @@ function RenderDish(props) {
                 <View style={styles.iconsstyle}>
                     <Icon raised reverse name={props.favorite ? 'heart' : 'heart-o'} type="font-awesome" color="#f50" onPress={() => { props.favorite ? console.log('Already Favorite') : props.onPress() }} />
                     <Icon type="font-awesome" name="pencil" raised reverse color="#512DA8" onPress={() => props.handleModal()} />
+                    <Icon
+                            raised
+                            reverse
+                            name='share'
+                            type='font-awesome'
+                            color='#51D2A8'
+                            style={styles.cardItem}
+                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)} />
                 </View>
             </Card>
             </Animatable.View>
