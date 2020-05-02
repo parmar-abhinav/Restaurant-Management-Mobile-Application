@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
 function RenderDish(props) {
 
     const dish = props.dish;
-
+    
     const recognizeDrag = ({moveX, moveY, dx, dy}) => {
         if(dx<-50)
             return true;
@@ -34,10 +34,14 @@ function RenderDish(props) {
             return false;
     }
 
+    handleViewRef = ref => this.view = ref;
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: (e, gestureState) => {
             return true;
         },
+        onPanResponderGrant: () => {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));},
+
         onPanResponderEnd: (e, gestureState) => {
             console.log("pan responder end", gestureState);
             if (recognizeDrag(gestureState))
@@ -57,7 +61,7 @@ function RenderDish(props) {
 
     if (dish != null) {
         return (
-            <Animatable.View animation="fadeInDown" duration={2000} delay={1000} {...panResponder.panHandlers}>
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000} {...panResponder.panHandlers} ref={this.handleViewRef}>
             <Card
                 featuredTitle={dish.name}
                 image={{ uri: baseUrl + dish.image }}>
