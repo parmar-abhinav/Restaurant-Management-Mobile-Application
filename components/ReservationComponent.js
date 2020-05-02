@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button , Modal} from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button , Modal, Alert} from 'react-native';
 import { Card } from 'react-native-elements';
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
+import * as Animatable from 'react-native-animatable';
 
 class Reservation extends Component {
 
@@ -40,8 +41,28 @@ class Reservation extends Component {
     }
     
     render() {
+        if(this.state.showModal){
+            var outside = this.state.place ? 'Inside' : 'Outside';
+            Alert.alert(
+                'Your Reservation OK',
+                'Number of Guests: ' + this.state.guests + '\nPosition: ' + outside + '\nDate and Time: ' + this.state.date,
+                 [
+                    {text: 'Cancel', onPress: () => {
+                        
+                        console.log('Cancel Pressed')
+                        this.resetForm();
+                        
+                    }, style: 'cancel'},
+                    {text: 'OK', onPress: () => {
+                        console.log("Ok Pressed");
+                         this.resetForm();
+                    }},
+                 ],
+                 {cancelable: false}
+            );
+        }
         return(
-            <ScrollView>
+            <Animatable.View animation="zoomIn">
                 <View style={styles.formRow}>
                 <Text style={styles.formLabel}>Number of Guests</Text>
                 <Picker
@@ -99,7 +120,7 @@ class Reservation extends Component {
                     accessibilityLabel="Learn more about this purple button"
                     />
                 </View>
-                <Modal animationType = {"slide"} transparent = {false}
+                {/* <Modal animationType = {"slide"} transparent = {false}
                     visible = {this.state.showModal}
                     onDismiss = {() => this.toggleModal() }
                     onRequestClose = {() => this.toggleModal() }>
@@ -115,8 +136,8 @@ class Reservation extends Component {
                             title="Close" 
                             />
                     </View>
-                </Modal>
-            </ScrollView>
+                </Modal> */}
+            </Animatable.View>
         );
     }
 
@@ -128,7 +149,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       flex: 1,
       flexDirection: 'row',
-      margin: 20
+      margin: 40
     },
     formLabel: {
         fontSize: 18,
